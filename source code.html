@@ -1,0 +1,1394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolarCore — The Future Shines Bright</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FFB800;
+    --solar: #FF6B00;
+    --deep: #0A0A0F;
+    --void: #060609;
+    --sky: #0D1B2A;
+    --panel: #1A1F2E;
+    --glow: #FFD700;
+    --text: #F0EAD6;
+    --muted: #8A8070;
+    --accent: #FF8C00;
+    --green: #4CAF82;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--sun);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,184,0,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    mix-blend-mode: screen;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(6,6,9,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--sun);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: radial-gradient(circle, var(--sun), var(--solar));
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--sun);
+    animation: pulse-sun 3s ease-in-out infinite;
+  }
+
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  nav ul a:hover { color: var(--sun); }
+
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--sun);
+    color: var(--sun);
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover {
+    background: var(--sun);
+    color: var(--void);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0 2rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,0,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 20%, rgba(255,184,0,0.12) 0%, transparent 50%),
+      linear-gradient(180deg, #0A0510 0%, #060609 100%);
+  }
+
+  /* Animated sun rays */
+  .sun-rays {
+    position: absolute;
+    top: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    height: 200vh;
+    background: conic-gradient(
+      from 0deg at 50% 10%,
+      transparent 0deg, rgba(255,184,0,0.03) 2deg, transparent 4deg,
+      transparent 10deg, rgba(255,107,0,0.03) 12deg, transparent 14deg,
+      transparent 20deg, rgba(255,184,0,0.02) 22deg, transparent 24deg,
+      transparent 30deg, rgba(255,107,0,0.03) 32deg, transparent 34deg,
+      transparent 40deg, rgba(255,184,0,0.03) 42deg, transparent 44deg,
+      transparent 50deg, rgba(255,107,0,0.02) 52deg, transparent 54deg,
+      transparent 60deg, rgba(255,184,0,0.03) 62deg, transparent 64deg,
+      transparent 70deg, rgba(255,107,0,0.02) 72deg, transparent 74deg,
+      transparent 80deg, rgba(255,184,0,0.03) 82deg, transparent 84deg
+    );
+    animation: rays-rotate 60s linear infinite;
+  }
+
+  @keyframes rays-rotate { to { transform: translateX(-50%) rotate(360deg); } }
+  @keyframes pulse-sun {
+    0%, 100% { box-shadow: 0 0 20px var(--sun); }
+    50% { box-shadow: 0 0 40px var(--sun), 0 0 60px rgba(255,184,0,0.3); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--sun);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fade-up 1s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.2em;
+    opacity: 0;
+    animation: fade-up 1.2s ease 0.5s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--sun), var(--solar), var(--glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    margin: 1.5rem auto 2.5rem;
+    opacity: 0;
+    animation: fade-up 1.2s ease 0.8s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    opacity: 0;
+    animation: fade-up 1.2s ease 1s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--sun), var(--solar));
+    color: var(--void);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    font-weight: 700;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255,184,0,0.4);
+  }
+
+  .btn-secondary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 1rem 2.5rem;
+    border: 1px solid rgba(255,184,0,0.3);
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--sun);
+    color: var(--sun);
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fade-in 1s ease 2s forwards;
+  }
+  .scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--sun), transparent);
+    animation: scroll-drop 2s ease-in-out infinite;
+  }
+  @keyframes scroll-drop {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.3; transform: scaleY(0.5); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Stats ticker */
+  .stats-ticker {
+    background: linear-gradient(90deg, transparent, rgba(255,184,0,0.08), transparent);
+    border-top: 1px solid rgba(255,184,0,0.1);
+    border-bottom: 1px solid rgba(255,184,0,0.1);
+    padding: 1.2rem 0;
+    overflow: hidden;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 4rem;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .ticker-item span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .ticker-item strong {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--sun);
+  }
+  .ticker-dot {
+    width: 4px; height: 4px;
+    background: var(--solar);
+    border-radius: 50%;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--sun);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* WHAT IS SOLAR */
+  .what-solar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .solar-visual {
+    position: relative;
+    height: 500px;
+  }
+
+  .panel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 4px;
+    position: absolute;
+    inset: 0;
+    transform: perspective(800px) rotateX(10deg) rotateY(-12deg);
+    transform-style: preserve-3d;
+  }
+
+  .solar-cell {
+    background: linear-gradient(135deg, #0d1f3c 0%, #1a3a6b 40%, #0d1f3c 100%);
+    border: 1px solid rgba(100,160,255,0.15);
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .solar-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent, transparent 30%,
+      rgba(100,160,255,0.05) 30%, rgba(100,160,255,0.05) 32%
+    );
+  }
+  .solar-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent, transparent 30%,
+      rgba(100,160,255,0.05) 30%, rgba(100,160,255,0.05) 32%
+    );
+  }
+  .solar-cell.active {
+    background: linear-gradient(135deg, #1a3a6b 0%, #2456a4 40%, #1a3a6b 100%);
+    box-shadow: inset 0 0 20px rgba(100,160,255,0.2);
+  }
+
+  .glow-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,184,0,0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .energy-bar {
+    position: absolute;
+    bottom: -2rem;
+    left: 0; right: 0;
+    height: 3px;
+    background: rgba(255,184,0,0.1);
+    overflow: hidden;
+  }
+  .energy-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--solar), var(--sun), var(--solar));
+    animation: energy-flow 2s ease-in-out infinite;
+    background-size: 200% 100%;
+  }
+  @keyframes energy-flow {
+    0%, 100% { background-position: 0% 0%; width: 0; }
+    50% { background-position: 100% 0%; width: 100%; }
+  }
+
+  .what-text p {
+    font-size: 1.2rem;
+    line-height: 1.9;
+    color: rgba(240,234,214,0.75);
+    margin-bottom: 1.5rem;
+  }
+
+  .what-text p strong {
+    color: var(--sun);
+    font-weight: 600;
+  }
+
+  .fact-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255,184,0,0.2);
+    color: var(--sun);
+    background: rgba(255,184,0,0.05);
+  }
+
+  /* HOW IT WORKS */
+  .how-section {
+    background: linear-gradient(180deg, var(--void), var(--sky), var(--void));
+    max-width: 100%;
+  }
+
+  .how-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .step {
+    background: var(--panel);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+  }
+  .step:hover {
+    background: linear-gradient(135deg, var(--panel), rgba(255,184,0,0.05));
+    transform: translateY(-4px);
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sun), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .step:hover::before { opacity: 1; }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(255,184,0,0.08);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .step-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .step h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  .step p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* TYPES */
+  .types-section { max-width: 1300px; margin: 0 auto; }
+
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .type-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--panel);
+    padding: 3rem 2.5rem;
+    transition: all 0.4s;
+    cursor: default;
+  }
+  .type-card:hover { transform: translateY(-6px); }
+
+  .type-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    transition: transform 0.4s ease;
+    transform: scaleX(0);
+  }
+  .type-card:nth-child(1)::after { background: var(--sun); }
+  .type-card:nth-child(2)::after { background: var(--solar); }
+  .type-card:nth-child(3)::after { background: var(--green); }
+  .type-card:hover::after { transform: scaleX(1); }
+
+  .type-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+  .type-tag.pv { background: rgba(255,184,0,0.1); color: var(--sun); }
+  .type-tag.thermal { background: rgba(255,107,0,0.1); color: var(--solar); }
+  .type-tag.csp { background: rgba(76,175,130,0.1); color: var(--green); }
+
+  .type-card h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .type-card p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .type-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .type-stat .big {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--sun);
+  }
+  .type-stat .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* BENEFITS */
+  .benefits-section {
+    background: radial-gradient(ellipse 100% 80% at 50% 50%, rgba(255,184,0,0.04), transparent);
+    padding: 6rem 4rem;
+  }
+  .benefits-inner { max-width: 1300px; margin: 0 auto; }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(255,184,0,0.05);
+    margin-top: 4rem;
+    border: 1px solid rgba(255,184,0,0.05);
+  }
+
+  .benefit-item {
+    background: var(--void);
+    padding: 2.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: background 0.3s;
+  }
+  .benefit-item:hover { background: rgba(255,184,0,0.03); }
+
+  .benefit-icon-wrap {
+    width: 48px; height: 48px;
+    flex-shrink: 0;
+    background: rgba(255,184,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .benefit-text h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .benefit-text p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* STATS */
+  .stats-section {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 6rem 4rem;
+  }
+
+  .big-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .stat-box {
+    background: var(--panel);
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-box::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sun), transparent);
+    transform: scaleX(0);
+    transition: transform 0.6s ease;
+  }
+  .stat-box:hover::before { transform: scaleX(1); }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    background: linear-gradient(135deg, var(--sun), var(--solar));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-desc {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* GLOBAL MAP */
+  .map-section { padding: 6rem 4rem; }
+  .map-inner { max-width: 1300px; margin: 0 auto; }
+
+  .solar-map {
+    margin-top: 3rem;
+    background: var(--panel);
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,184,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,184,0,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .hotspot {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: var(--sun);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .hotspot::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 2px solid var(--sun);
+    border-radius: 50%;
+    animation: ping 2s ease-out infinite;
+  }
+  .hotspot::after {
+    content: '';
+    position: absolute;
+    inset: -16px;
+    border: 1px solid rgba(255,184,0,0.3);
+    border-radius: 50%;
+    animation: ping 2s ease-out 0.5s infinite;
+  }
+  @keyframes ping {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  .hotspot-label {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--sun);
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255,184,0,0.5);
+  }
+
+  .map-legend {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* FUTURE */
+  .future-section {
+    background: linear-gradient(135deg, var(--sky) 0%, var(--void) 100%);
+    padding: 6rem 4rem;
+  }
+  .future-inner { max-width: 1300px; margin: 0 auto; }
+
+  .future-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+  }
+
+  .future-item {
+    padding: 2.5rem;
+    border-left: 1px solid rgba(255,184,0,0.15);
+    transition: border-color 0.3s;
+  }
+  .future-item:hover { border-color: var(--sun); }
+
+  .future-item .year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--solar);
+    margin-bottom: 0.8rem;
+  }
+
+  .future-item h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+  .future-item p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 8rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,107,0,0.12) 0%, transparent 70%);
+  }
+  .cta-inner { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+  .cta-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .cta-subtitle {
+    font-size: 1.2rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--void);
+    border-top: 1px solid rgba(255,184,0,0.08);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+  .footer-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--sun); }
+
+  /* Dividers */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,184,0,0.1), transparent);
+    margin: 0 4rem;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    nav { padding: 1.5rem 2rem; }
+    nav ul { display: none; }
+    section { padding: 4rem 2rem; }
+    .what-solar { grid-template-columns: 1fr; gap: 3rem; }
+    .solar-visual { height: 300px; }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .types-grid { grid-template-columns: 1fr; }
+    .big-stats { grid-template-columns: repeat(2, 1fr); }
+    .future-grid { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .big-stats { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon"></div>
+    SOLAR<span style="color:var(--text)">CORE</span>
+  </a>
+  <ul>
+    <li><a href="#what">What Is Solar</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#types">Types</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#future">Future</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="sun-rays"></div>
+  <p class="hero-eyebrow">⚡ Clean Energy Revolution</p>
+  <h1 class="hero-title">Powered by<br>the <em>Sun</em></h1>
+  <p class="hero-subtitle">Harnessing the infinite power of our star to build a cleaner, brighter world for every generation to come.</p>
+  <div class="hero-actions">
+    <a href="#what" class="btn-primary">Explore Solar Energy</a>
+    <a href="#how" class="btn-secondary">How It Works →</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS TICKER -->
+<div class="stats-ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><strong>1.7 TWh</strong><span>Global Solar Capacity 2024</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>90%</strong><span>Cost Drop Since 2010</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>4.5 Billion</strong><span>Years of Sunlight Remaining</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>173,000 TW</strong><span>Solar Energy Hitting Earth Daily</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>Zero</strong><span>Emissions During Operation</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>25-30 Yrs</strong><span>Average Panel Lifespan</span><div class="ticker-dot"></div></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="ticker-item"><strong>1.7 TWh</strong><span>Global Solar Capacity 2024</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>90%</strong><span>Cost Drop Since 2010</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>4.5 Billion</strong><span>Years of Sunlight Remaining</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>173,000 TW</strong><span>Solar Energy Hitting Earth Daily</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>Zero</strong><span>Emissions During Operation</span><div class="ticker-dot"></div></div>
+    <div class="ticker-item"><strong>25-30 Yrs</strong><span>Average Panel Lifespan</span><div class="ticker-dot"></div></div>
+  </div>
+</div>
+
+<!-- WHAT IS SOLAR -->
+<section id="what" style="padding: 8rem 4rem;">
+  <div class="what-solar">
+    <div class="solar-visual reveal">
+      <div class="panel-grid">
+        <div class="solar-cell"></div><div class="solar-cell active"></div><div class="solar-cell"></div><div class="solar-cell active"></div>
+        <div class="solar-cell active"></div><div class="solar-cell"></div><div class="solar-cell active"></div><div class="solar-cell"></div>
+        <div class="solar-cell"></div><div class="solar-cell active"></div><div class="solar-cell"></div><div class="solar-cell active"></div>
+        <div class="solar-cell active"></div><div class="solar-cell"></div><div class="solar-cell active"></div><div class="solar-cell"></div>
+      </div>
+      <div class="glow-overlay"></div>
+      <div class="energy-bar"><div class="energy-bar-fill"></div></div>
+    </div>
+    <div class="what-text reveal">
+      <p class="section-label">01 — What Is Solar</p>
+      <h2 class="section-title">Energy Born<br>from Light</h2>
+      <p>Solar energy is the <strong>radiation produced by the Sun</strong> and harnessed using a range of technologies — from photovoltaic cells converting light to electricity, to solar thermal collectors generating heat.</p>
+      <p>The Sun delivers more energy to Earth in <strong>one hour</strong> than humanity consumes in an entire year. It is the most abundant, inexhaustible, and cleanest energy source available to our civilization.</p>
+      <p>Unlike fossil fuels formed over millions of years, solar energy is <strong>perpetually renewable</strong> — available every single day, everywhere on Earth, with zero fuel cost and zero carbon emissions.</p>
+      <div class="fact-chips">
+        <span class="chip">Renewable</span>
+        <span class="chip">Zero Emissions</span>
+        <span class="chip">Inexhaustible</span>
+        <span class="chip">Scalable</span>
+        <span class="chip">Distributed</span>
+        <span class="chip">Low Maintenance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="how-inner">
+    <p class="section-label reveal">02 — How It Works</p>
+    <h2 class="section-title reveal">The Journey of<br>a Photon</h2>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <span class="step-icon">☀️</span>
+        <h3>Sunlight Arrives</h3>
+        <p>Photons — particles of light — travel 150 million km from the Sun to Earth in about 8 minutes, carrying electromagnetic energy in the form of radiation.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <span class="step-icon">⚛️</span>
+        <h3>Photovoltaic Effect</h3>
+        <p>When photons strike a silicon solar cell, they knock electrons loose. The cell's built-in electric field forces these free electrons into directional current — electricity.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <span class="step-icon">🔄</span>
+        <h3>DC to AC Conversion</h3>
+        <p>An inverter converts the raw direct current (DC) from panels into alternating current (AC) — the standard form used by homes, businesses, and the electrical grid.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <span class="step-icon">🏠</span>
+        <h3>Power Your World</h3>
+        <p>Clean electricity flows to power appliances, charge devices, heat water, and run vehicles — or is stored in batteries or fed back to the grid for credit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TYPES OF SOLAR -->
+<section id="types" style="padding: 6rem 4rem;">
+  <div class="types-section">
+    <p class="section-label reveal">03 — Types of Solar</p>
+    <h2 class="section-title reveal">Three Ways to<br>Capture the Sun</h2>
+    <div class="types-grid">
+      <div class="type-card reveal">
+        <span class="type-tag pv">Most Common</span>
+        <h3>Photovoltaic (PV)</h3>
+        <p>Silicon-based solar panels that directly convert sunlight into electricity via the photovoltaic effect. Found on rooftops, solar farms, and consumer devices worldwide.</p>
+        <p>Monocrystalline cells achieve the highest efficiency, while thin-film panels offer flexibility for unconventional surfaces.</p>
+        <div class="type-stat">
+          <span class="big">29%</span>
+          <span class="label">Peak Commercial Efficiency</span>
+        </div>
+      </div>
+      <div class="type-card reveal">
+        <span class="type-tag thermal">Residential & Industrial</span>
+        <h3>Solar Thermal</h3>
+        <p>Collectors that absorb sunlight to directly heat water or air for residential hot water systems, space heating, pool heating, and industrial process heat.</p>
+        <p>Evacuated tube collectors perform even in cold or cloudy climates, making them viable globally.</p>
+        <div class="type-stat">
+          <span class="big">70%</span>
+          <span class="label">Thermal Efficiency Possible</span>
+        </div>
+      </div>
+      <div class="type-card reveal">
+        <span class="type-tag csp">Utility Scale</span>
+        <h3>Concentrated Solar (CSP)</h3>
+        <p>Mirrors or lenses focus sunlight onto a receiver to generate extreme heat, which drives turbines. CSP can store thermal energy for electricity generation after dark.</p>
+        <p>Tower systems can reach temperatures above 1,000°C for industrial-scale power generation.</p>
+        <div class="type-stat">
+          <span class="big">565°C</span>
+          <span class="label">Operating Temperature</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BENEFITS -->
+<section id="benefits" class="benefits-section">
+  <div class="benefits-inner">
+    <p class="section-label reveal">04 — Benefits</p>
+    <h2 class="section-title reveal">Why Solar Wins</h2>
+    <div class="benefits-grid">
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">🌍</div>
+        <div class="benefit-text">
+          <h4>Zero Carbon Emissions</h4>
+          <p>Solar panels produce no greenhouse gases during operation. Over their lifetime, they offset hundreds of tonnes of CO₂ compared to fossil fuel alternatives — a direct climate benefit.</p>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">💰</div>
+        <div class="benefit-text">
+          <h4>Dramatically Falling Costs</h4>
+          <p>Solar electricity costs have dropped over 90% since 2010 — from $0.28 to under $0.03 per kWh in the best markets. It is now the cheapest electricity source in history.</p>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">⚡</div>
+        <div class="benefit-text">
+          <h4>Energy Independence</h4>
+          <p>Homes and businesses with solar generation reduce or eliminate grid dependency. Nations with high solar adoption reduce dependence on imported fossil fuels, strengthening energy security.</p>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">💼</div>
+        <div class="benefit-text">
+          <h4>Massive Job Creation</h4>
+          <p>The solar industry employs over 4 million people worldwide — in manufacturing, installation, maintenance, and research — with rapid growth projected through 2030 and beyond.</p>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">🔇</div>
+        <div class="benefit-text">
+          <h4>Silent & Minimal Footprint</h4>
+          <p>Rooftop solar requires no additional land and produces no noise. Ground-mounted systems can co-exist with agriculture (agrivoltaics), doubling land use efficiency.</p>
+        </div>
+      </div>
+      <div class="benefit-item reveal">
+        <div class="benefit-icon-wrap">🌐</div>
+        <div class="benefit-text">
+          <h4>Universal Accessibility</h4>
+          <p>Solar is deployable anywhere — from remote villages to city skyscrapers. Off-grid solar has already brought electricity to over 420 million people who lacked grid access.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GLOBAL STATS -->
+<section style="padding: 6rem 4rem;">
+  <div class="stats-section" style="padding: 0; max-width: 1300px; margin: 0 auto;">
+    <p class="section-label reveal">05 — By the Numbers</p>
+    <h2 class="section-title reveal">Solar in<br>the World Today</h2>
+    <div class="big-stats">
+      <div class="stat-box reveal">
+        <div class="stat-num">1.7</div>
+        <p style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--sun);margin-bottom:0.4rem;letter-spacing:0.1em;">TERAWATTS</p>
+        <p class="stat-desc">Global installed solar capacity 2024</p>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num">4.5%</div>
+        <p style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--sun);margin-bottom:0.4rem;letter-spacing:0.1em;">OF GLOBAL</p>
+        <p class="stat-desc">Share of world electricity from solar</p>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num">90%</div>
+        <p style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--sun);margin-bottom:0.4rem;letter-spacing:0.1em;">COST REDUCTION</p>
+        <p class="stat-desc">Solar panel cost drop since 2010</p>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num">2050</div>
+        <p style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--sun);margin-bottom:0.4rem;letter-spacing:0.1em;">TARGET YEAR</p>
+        <p class="stat-desc">IEA projects solar as largest energy source</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GLOBAL MAP -->
+<section class="map-section">
+  <div class="map-inner">
+    <p class="section-label reveal">06 — Global Solar Leaders</p>
+    <h2 class="section-title reveal">Solar Adoption<br>Worldwide</h2>
+    <div class="solar-map reveal">
+      <div class="map-grid"></div>
+
+      <!-- China -->
+      <div class="hotspot" style="left:72%;top:38%;">
+        <div class="hotspot-label">CHINA · 750 GW</div>
+      </div>
+      <!-- USA -->
+      <div class="hotspot" style="left:20%;top:42%;animation-delay:0.5s">
+        <div class="hotspot-label">USA · 180 GW</div>
+      </div>
+      <!-- India -->
+      <div class="hotspot" style="left:63%;top:50%;animation-delay:1s">
+        <div class="hotspot-label">INDIA · 85 GW</div>
+      </div>
+      <!-- Germany -->
+      <div class="hotspot" style="left:46%;top:28%;animation-delay:1.5s">
+        <div class="hotspot-label">GERMANY · 70 GW</div>
+      </div>
+      <!-- Japan -->
+      <div class="hotspot" style="left:79%;top:35%;animation-delay:2s">
+        <div class="hotspot-label">JAPAN · 84 GW</div>
+      </div>
+      <!-- Australia -->
+      <div class="hotspot" style="left:78%;top:68%;animation-delay:0.3s">
+        <div class="hotspot-label">AUSTRALIA · 35 GW</div>
+      </div>
+
+      <div class="map-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--sun)"></div>
+          Major Solar Nation
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--solar)"></div>
+          Emerging Market
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FUTURE -->
+<section id="future" class="future-section">
+  <div class="future-inner">
+    <p class="section-label reveal">07 — The Future</p>
+    <h2 class="section-title reveal">What's Coming<br>in Solar</h2>
+    <div class="future-grid">
+      <div class="future-item reveal">
+        <div class="year">NOW — 2027</div>
+        <h3>Perovskite Solar Cells</h3>
+        <p>Next-generation solar cells using perovskite crystals promise efficiencies above 35% at drastically lower manufacturing costs than traditional silicon — potentially revolutionizing solar economics.</p>
+      </div>
+      <div class="future-item reveal">
+        <div class="year">2025 — 2030</div>
+        <h3>Solar + Battery Integration</h3>
+        <p>Paired storage systems make solar viable 24/7, eliminating intermittency. Grid-scale battery projects are already powering cities through night and cloudy periods reliably.</p>
+      </div>
+      <div class="future-item reveal">
+        <div class="year">2030 — 2040</div>
+        <h3>Building-Integrated PV</h3>
+        <p>Solar roof tiles, transparent solar glass windows, and solar facades will turn every building surface into a power generator — invisible integration into the urban landscape.</p>
+      </div>
+      <div class="future-item reveal">
+        <div class="year">2040 — BEYOND</div>
+        <h3>Space-Based Solar Power</h3>
+        <p>Satellites collecting solar energy in orbit — where the Sun shines 24/7 at full intensity — and beaming it wirelessly to Earth could deliver virtually limitless clean power.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <p class="section-label" style="text-align:center; margin-bottom:1rem;">Ready to Transition?</p>
+    <h2 class="cta-title reveal">The Sun Is Already<br>Shining on <em>Your</em> Future</h2>
+    <p class="cta-subtitle reveal">Every rooftop is a power plant waiting to be activated. Every sunny day is energy going uncaptured. The question isn't whether solar makes sense — it's when you'll start.</p>
+    <div class="hero-actions reveal" style="justify-content:center">
+      <a href="#what" class="btn-primary">Learn More</a>
+      <a href="#how" class="btn-secondary">See How It Works →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo" style="gap:0.5rem;">
+    <div class="logo-icon" style="width:20px;height:20px;"></div>
+    SOLARCORE
+  </a>
+  <p>© 2026 SolarCore · Built for a cleaner tomorrow</p>
+  <div class="footer-links">
+    <a href="#what">About Solar</a>
+    <a href="#how">Technology</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#future">Future</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateCursor() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+      ring.style.transform = 'translate(-50%, -50%) scale(1.5)';
+      ring.style.borderColor = 'rgba(255,184,0,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      ring.style.transform = 'translate(-50%, -50%) scale(1)';
+      ring.style.borderColor = 'rgba(255,184,0,0.5)';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, (Array.from(entry.target.parentElement.children).indexOf(entry.target)) * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Solar cells animation
+  const cells = document.querySelectorAll('.solar-cell');
+  setInterval(() => {
+    const randomCell = cells[Math.floor(Math.random() * cells.length)];
+    randomCell.classList.toggle('active');
+  }, 400);
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Count up animation for stats
+  function countUp(el, target, suffix = '') {
+    let current = 0;
+    const increment = target / 60;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        el.textContent = target + suffix;
+        clearInterval(timer);
+      } else {
+        el.textContent = Math.floor(current) + suffix;
+      }  
+    }, 25);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const statNums = entry.target.querySelectorAll('.stat-num');
+        statsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  const statsGrid = document.querySelector('.big-stats');
+  if (statsGrid) statsObserver.observe(statsGrid);
+</script>
+</body>
+</html>
